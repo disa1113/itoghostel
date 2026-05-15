@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Номера - Хостел Уют</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/" class="logo"><i class="fas fa-bed"></i> Хостел Уют</a>
+            <div class="nav-links">
+                <a href="/"><i class="fas fa-home"></i> Главная</a>
+                <a href="/rooms"><i class="fas fa-door-closed"></i> Номера</a>
+                {{if .IsAuthenticated}}
+                    {{if eq .Role "manager"}}
+                        <a href="/manager">Панель</a>
+                    {{else}}
+                        <a href="/dashboard">Кабинет</a>
+                    {{end}}
+                    <a href="/logout" class="btn btn-outline">Выйти</a>
+                {{else}}
+                    <a href="/login" class="btn">Войти</a>
+                {{end}}
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <div class="container">
+            <h1 class="section-title">Наши номера</h1>
+            <div class="room-grid">
+                {{range .Rooms}}
+                <div class="room-card">
+                    <div class="room-img"><i class="fas fa-bed"></i></div>
+                    <div class="room-content">
+                        <h3>{{.Name}}</h3>
+                        <p>{{.Description}}</p>
+                        <div class="room-price">{{.Price}} ₽ / ночь</div>
+                        <p>👥 До {{.Capacity}} человек</p>
+                        {{if $.IsAuthenticated}}
+                            <a href="/book-room?id={{.ID}}" class="btn" style="width:100%; margin-top:15px;">Забронировать</a>
+                        {{else}}
+                            <a href="/login" class="btn" style="width:100%; margin-top:15px;">Войти для бронирования</a>
+                        {{end}}
+                    </div>
+                </div>
+                {{end}}
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-section"><h3>Хостел Уют</h3><p>Комфортное проживание</p></div>
+            <div class="footer-section"><h3>Контакты</h3><p>+7 (999) 123-45-67</p><p>info@hostel-uyut.ru</p></div>
+            <div class="footer-section"><h3>Адрес</h3><p>г. Москва, ул. Примерная, д. 123</p></div>
+        </div>
+    </footer>
+</body>
+</html>

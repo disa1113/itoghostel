@@ -1,0 +1,28 @@
+﻿{{define "content"}}
+<div style="padding: 50px; text-align: center;">
+    <h2>Бронирование номера</h2>
+    <h3>{{.Room.Name}}</h3>
+    <p>{{.Room.Description}}</p>
+    <p>Цена: {{.Room.Price}} ₽</p>
+    <p>Вместимость: {{.Room.Capacity}} чел.</p>
+
+    <form action="/book" method="POST">
+        <input type="hidden" name="room_id" value="{{.Room.ID}}">
+        <label>Заезд:</label>
+        <input type="date" name="check_in" required><br><br>
+        <label>Выезд:</label>
+        <input type="date" name="check_out" required><br><br>
+        <label>Гостей:</label>
+        <select name="guests" required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+        </select><br><br>
+        <button type="submit">Забронировать</button>
+    </form>
+    <a href="/rooms">Назад</a>
+</div>
+{{end}}

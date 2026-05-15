@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - Хостел Уют</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-bed"></i> Хостел Уют
+            </a>
+            <div class="nav-links">
+                <a href="/"><i class="fas fa-home"></i> Главная</a>
+                <a href="/rooms"><i class="fas fa-door-closed"></i> Номера</a>
+                <a href="/login" class="btn"><i class="fas fa-sign-in-alt"></i> Войти</a>
+                <a href="/register" class="btn btn-outline">Регистрация</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2 class="auth-title">
+                <i class="fas fa-sign-in-alt"></i> Вход в систему
+            </h2>
+            
+            {{if .Error}}
+            <div class="error-message">
+                {{.Error}}
+            </div>
+            {{end}}
+            
+            <form method="POST" action="/login">
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Имя пользователя</label>
+                    <input type="text" id="username" name="username" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Пароль</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+                
+                <button type="submit" class="btn btn-block">
+                    <i class="fas fa-sign-in-alt"></i> Войти
+                </button>
+                
+                <div style="text-align: center; margin-top: 1rem;">
+                    <p>Нет аккаунта? <a href="/register">Зарегистрируйтесь</a></p>
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>Хостел Уют</h3>
+                <p>Комфортное проживание по доступным ценам</p>
+            </div>
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p><i class="fas fa-phone"></i> +7 (999) 123-45-67</p>
+                <p><i class="fas fa-envelope"></i> info@hostel-uyut.ru</p>
+            </div>
+            <div class="footer-section">
+                <h3>Адрес</h3>
+                <p><i class="fas fa-map-marker-alt"></i> г. Москва, ул. Примерная, д. 123</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(e) {
+                const username = document.getElementById('username');
+                const password = document.getElementById('password');
+                
+                if (!username.value.trim() || !password.value.trim()) {
+                    e.preventDefault();
+                    alert('Пожалуйста, заполните все поля');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

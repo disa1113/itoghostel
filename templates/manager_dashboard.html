@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель управления - Хостел Уют</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-bed"></i> Хостел Уют
+            </a>
+            <div class="nav-links">
+                <a href="/"><i class="fas fa-home"></i> Главная</a>
+                <a href="/manager" class="btn"><i class="fas fa-tasks"></i> Панель управления</a>
+                <a href="/logout" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1><i class="fas fa-tachometer-alt"></i> Панель управления</h1>
+                <p>Управление бронированиями хостела</p>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <button onclick="filterBookings('all')" class="btn">
+                    <i class="fas fa-list"></i> Все
+                </button>
+                <button onclick="filterBookings('pending')" class="btn" style="background: #ffc107;">
+                    <i class="fas fa-clock"></i> Ожидание
+                </button>
+                <button onclick="filterBookings('confirmed')" class="btn" style="background: #28a745;">
+                    <i class="fas fa-check"></i> Подтверждено
+                </button>
+                <button onclick="filterBookings('cancelled')" class="btn" style="background: #dc3545;">
+                    <i class="fas fa-times"></i> Отменено
+                </button>
+                <a href="/" class="btn" style="background: #6c757d;">
+                    <i class="fas fa-home"></i> На сайт
+                </a>
+            </div>
+            
+            <h2 style="margin-bottom: 1rem; color: #333;">
+                <i class="fas fa-calendar-check"></i> Все бронирования
+            </h2>
+            
+            <div class="table-container">
+                <table class="table" id="bookingsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Клиент</th>
+                            <th>Номер</th>
+                            <th>Дата заезда</th>
+                            <th>Дата выезда</th>
+                            <th>Гостей</th>
+                            <th>Статус</th>
+                            <th>Дата создания</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .Bookings}}
+                        <tr data-status="{{.Status}}">
+                            <td>#{{.ID}}</td>
+                            <td>{{.UserName}}</td>
+                            <td>{{.RoomName}}</td>
+                            <td>{{.CheckIn}}</td>
+                            <td>{{.CheckOut}}</td>
+                            <td>{{.Guests}}</td>
+                            <td>
+                                <span class="status status-{{.Status}}">
+                                    {{if eq .Status "pending"}}Ожидание{{end}}
+                                    {{if eq .Status "confirmed"}}Подтверждено{{end}}
+                                    {{if eq .Status "cancelled"}}Отменено{{end}}
+                                </span>
+                            </td>
+                            <td>{{.CreatedAt}}</td>
+                            <td>
+                                {{if eq .Status "pending"}}
+                                <form action="/update-booking" method="POST" style="display: inline;">
+                                    <input type="hidden" name="booking_id" value="{{.ID}}">
+                                    <input type="hidden" name="status" value="confirmed">
+                                    <button type="submit" class="btn" style="padding: 0.3rem 0.8rem; background: #28a745;">
+                                        <i class="fas fa-check"></i> Подтвердить
+                                    </button>
+                                </form>
+                                {{end}}
+                            </td>
+                        </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="margin-top: 2rem; padding: 1.5rem; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <h3 style="color: #333; margin-bottom: 1rem;">
+                    <i class="fas fa-chart-bar"></i> Статистика
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                        <div style="font-size: 2rem; color: #667eea; font-weight: bold;">{{.TotalBookings}}</div>
+                        <div style="color: #666;">Всего бронирований</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                        <div style="font-size: 2rem; color: #28a745; font-weight: bold;">{{.ConfirmedBookings}}</div>
+                        <div style="color: #666;">Подтверждено</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                        <div style="font-size: 2rem; color: #ffc107; font-weight: bold;">{{.PendingBookings}}</div>
+                        <div style="color: #666;">Ожидание</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>Хостел Уют</h3>
+                <p>Комфортное проживание по доступным ценам</p>
+            </div>
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p><i class="fas fa-phone"></i> +7 (999) 123-45-67</p>
+                <p><i class="fas fa-envelope"></i> info@hostel-uyut.ru</p>
+            </div>
+            <div class="footer-section">
+                <h3>Адрес</h3>
+                <p><i class="fas fa-map-marker-alt"></i> г. Москва, ул. Примерная, д. 123</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function filterBookings(status) {
+            const rows = document.querySelectorAll('#bookingsTable tbody tr');
+            rows.forEach(row => {
+                if (status === 'all' || row.dataset.status === status) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Подтверждение действий
+            const confirmForms = document.querySelectorAll('form[action="/update-booking"]');
+            confirmForms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    if (!confirm('Подтвердить это бронирование?')) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

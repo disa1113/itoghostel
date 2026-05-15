@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хостел Уют - {{.Title}}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-bed"></i> Хостел Уют
+            </a>
+            <div class="nav-links">
+                <a href="/"><i class="fas fa-home"></i> Главная</a>
+                <a href="/rooms"><i class="fas fa-door-closed"></i> Номера</a>
+                {{if .IsAuthenticated}}
+                    {{if eq .Role "manager"}}
+                        <a href="/manager"><i class="fas fa-tasks"></i> Панель управления</a>
+                    {{else}}
+                        <a href="/dashboard"><i class="fas fa-user"></i> Личный кабинет</a>
+                    {{end}}
+                    <a href="/logout" class="btn"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+                {{else}}
+                    <a href="/login" class="btn"><i class="fas fa-sign-in-alt"></i> Войти</a>
+                    <a href="/register" class="btn btn-outline">Регистрация</a>
+                {{end}}
+            </div>
+        </div>
+    </nav>
+
+    {{block "content" .}}{{end}}
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>Хостел Уют</h3>
+                <p>Комфортное проживание по доступным ценам</p>
+            </div>
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p><i class="fas fa-phone"></i> +7 (999) 123-45-67</p>
+                <p><i class="fas fa-envelope"></i> info@hostel-uyut.ru</p>
+            </div>
+            <div class="footer-section">
+                <h3>Адрес</h3>
+                <p><i class="fas fa-map-marker-alt"></i> г. Москва, ул. Примерная, д. 123</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Простая валидация форм
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    const required = this.querySelectorAll('[required]');
+                    let valid = true;
+                    
+                    required.forEach(input => {
+                        if (!input.value.trim()) {
+                            valid = false;
+                            input.style.borderColor = 'red';
+                        } else {
+                            input.style.borderColor = '';
+                        }
+                    });
+                    
+                    if (!valid) {
+                        e.preventDefault();
+                        alert('Пожалуйста, заполните все обязательные поля');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

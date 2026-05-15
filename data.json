@@ -1,0 +1,107 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "manager",
+      "email": "manager@hostel.com",
+      "password": "$2a$10$jVSfKDFRuejGTjRBgfUQouEeSTV3GK1EDPyyH3Pzl219lBbFfOujW",
+      "role": "manager",
+      "created_at": "2026-02-01"
+    },
+    {
+      "id": 2,
+      "username": "user",
+      "email": "user@hostel.com",
+      "password": "$2a$10$4v7AzVnpdBtz5bmGkNElbelndl5J7olS7A4mPS3l6.VFZo19Szmjm",
+      "role": "user",
+      "created_at": "2026-02-01"
+    },
+    {
+      "id": 3,
+      "username": "mankoo3",
+      "email": "mankoo3@mail.ru",
+      "password": "$2a$10$klMkFIzQlGb5Phihb2AAXeG0vD9YHn3PdDwaRM8ehv.t3722ZdPU6",
+      "role": "user",
+      "created_at": "2026-02-01 16:54:04"
+    },
+    {
+      "id": 4,
+      "username": "test",
+      "email": "test@mail.ru",
+      "password": "$2a$10$hZLxnzUn5rhHnl5gej3By.1aH46jhQOzTbapaVDEyOhYtKEEz.yG6",
+      "role": "user",
+      "created_at": "2026-02-01 16:55:30"
+    }
+  ],
+  "rooms": [
+    {
+      "id": 1,
+      "name": "Эконом 4-местный",
+      "description": "Комфортабельный номер на 4 человека с общими удобствами",
+      "price": 1500,
+      "capacity": 4
+    },
+    {
+      "id": 2,
+      "name": "Стандарт 2-местный",
+      "description": "Номер с двумя отдельными кроватями и телевизором",
+      "price": 2500,
+      "capacity": 2
+    },
+    {
+      "id": 3,
+      "name": "Премиум 1-местный",
+      "description": "Одноместный номер с удобствами и кондиционером",
+      "price": 3500,
+      "capacity": 1
+    },
+    {
+      "id": 4,
+      "name": "Семейный номер",
+      "description": "Большой номер для семьи или компании до 6 человек",
+      "price": 4500,
+      "capacity": 6
+    }
+  ],
+  "bookings": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "room_id": 1,
+      "room_name": "Эконом 4-местный",
+      "user_name": "manager",
+      "check_in": "2026-02-02",
+      "check_out": "2026-02-03",
+      "guests": 0,
+      "status": "pending",
+      "price": 1500,
+      "created_at": "01.02.2026 16:52"
+    },
+    {
+      "id": 2,
+      "user_id": 3,
+      "room_id": 1,
+      "room_name": "Эконом 4-местный",
+      "user_name": "mankoo3",
+      "check_in": "2026-02-02",
+      "check_out": "2026-02-03",
+      "guests": 2,
+      "status": "pending",
+      "price": 1500,
+      "created_at": "01.02.2026 16:54"
+    },
+    {
+      "id": 3,
+      "user_id": 4,
+      "room_id": 3,
+      "room_name": "Премиум 1-местный",
+      "user_name": "test",
+      "check_in": "2026-02-02",
+      "check_out": "2026-02-03",
+      "guests": 0,
+      "status": "confirmed",
+      "price": 3500,
+      "created_at": "01.02.2026 16:55"
+    }
+  ]
+}

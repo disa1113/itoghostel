@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бронирование - Хостел Уют</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-box {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid #334155;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #c084fc;
+        }
+        .room-info {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #8b5cf6;
+        }
+        .room-info h3 {
+            color: #c084fc;
+            margin-bottom: 8px;
+        }
+        .room-info p {
+            color: #94a3b8;
+            margin: 5px 0;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            color: #94a3b8;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #7c3aed;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            color: #c084fc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-box">
+            <h2>📅 Бронирование номера</h2>
+
+            <div class="room-info">
+                <h3>Стандарт 4-местный</h3>
+                <p>Комфортабельный номер на 4 человека</p>
+                <p><strong>1200 ₽</strong> / ночь | 👥 Вместимость: 4 чел.</p>
+            </div>
+
+            <form action="/book" method="POST">
+                <label>Дата заезда</label>
+                <input type="date" name="check_in" required>
+
+                <label>Дата выезда</label>
+                <input type="date" name="check_out" required>
+
+                <label>Количество гостей</label>
+                <select name="guests" required>
+                    <option value="1">1 гость</option>
+                    <option value="2">2 гостя</option>
+                    <option value="3">3 гостя</option>
+                    <option value="4">4 гостя</option>
+                </select>
+
+                <button type="submit">✅ Подтвердить бронирование</button>
+            </form>
+
+            <a href="/rooms" class="back-link">← Вернуться к номерам</a>
+        </div>
+    </div>
+
+    <script>
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const dayAfter = new Date(tomorrow);
+        dayAfter.setDate(dayAfter.getDate() + 1);
+
+        const formatDate = (d) => d.toISOString().split('T')[0];
+
+        const checkIn = document.querySelector('input[name="check_in"]');
+        const checkOut = document.querySelector('input[name="check_out"]');
+
+        if (checkIn) {
+            checkIn.min = formatDate(tomorrow);
+            checkIn.value = formatDate(tomorrow);
+            checkOut.min = formatDate(dayAfter);
+            checkOut.value = formatDate(dayAfter);
+
+            checkIn.onchange = function() {
+                const next = new Date(this.value);
+                next.setDate(next.getDate() + 1);
+                checkOut.min = formatDate(next);
+                if (new Date(checkOut.value) < next) {
+                    checkOut.value = formatDate(next);
+                }
+            };
+        }
+    </script>
+</body>
+</html>

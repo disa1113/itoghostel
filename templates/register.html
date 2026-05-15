@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Хостел Уют</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-bed"></i> Хостел Уют
+            </a>
+            <div class="nav-links">
+                <a href="/"><i class="fas fa-home"></i> Главная</a>
+                <a href="/rooms"><i class="fas fa-door-closed"></i> Номера</a>
+                <a href="/login" class="btn"><i class="fas fa-sign-in-alt"></i> Войти</a>
+                <a href="/register" class="btn btn-outline">Регистрация</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2 class="auth-title">
+                <i class="fas fa-user-plus"></i> Регистрация
+            </h2>
+            
+            {{if .Error}}
+            <div class="error-message">
+                {{.Error}}
+            </div>
+            {{end}}
+            
+            <form method="POST" action="/register">
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Имя пользователя</label>
+                    <input type="text" id="username" name="username" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Пароль</label>
+                    <input type="password" id="password" name="password" class="form-control" required minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password"><i class="fas fa-lock"></i> Подтвердите пароль</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                </div>
+                
+                <button type="submit" class="btn btn-block">
+                    <i class="fas fa-user-plus"></i> Зарегистрироваться
+                </button>
+                
+                <div style="text-align: center; margin-top: 1rem;">
+                    <p>Уже есть аккаунт? <a href="/login">Войдите</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>Хостел Уют</h3>
+                <p>Комфортное проживание по доступным ценам</p>
+            </div>
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p><i class="fas fa-phone"></i> +7 (999) 123-45-67</p>
+                <p><i class="fas fa-envelope"></i> info@hostel-uyut.ru</p>
+            </div>
+            <div class="footer-section">
+                <h3>Адрес</h3>
+                <p><i class="fas fa-map-marker-alt"></i> г. Москва, ул. Примерная, д. 123</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirm_password');
+            
+            form.addEventListener('submit', function(e) {
+                // Проверка заполнения полей
+                const required = this.querySelectorAll('[required]');
+                let valid = true;
+                
+                required.forEach(input => {
+                    if (!input.value.trim()) {
+                        valid = false;
+                        input.style.borderColor = 'red';
+                    } else {
+                        input.style.borderColor = '';
+                    }
+                });
+                
+                // Проверка совпадения паролей
+                if (password.value !== confirmPassword.value) {
+                    valid = false;
+                    password.style.borderColor = 'red';
+                    confirmPassword.style.borderColor = 'red';
+                    alert('Пароли не совпадают!');
+                }
+                
+                // Проверка длины пароля
+                if (password.value.length < 6) {
+                    valid = false;
+                    password.style.borderColor = 'red';
+                    alert('Пароль должен быть не менее 6 символов');
+                }
+                
+                if (!valid) {
+                    e.preventDefault();
+                }
+            });
+            
+            // Сброс цвета границы при вводе
+            [password, confirmPassword].forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.style.borderColor === 'red') {
+                        this.style.borderColor = '';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
