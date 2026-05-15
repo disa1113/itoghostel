@@ -439,19 +439,30 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		hash, _ := hashPassword(password)
-		res, err := db.Exec("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)", username, email, hash)
+		var userID int64
+		err := db.QueryRow("INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id", username, email, hash).Scan(&userID)
 		if err != nil {
+			log.Printf("Ошибка регистрации: %v", err)
 			tmpl.ExecuteTemplate(w, "register.html", map[string]interface{}{"Error": "Ошибка регистрации"})
 			return
 		}
 
-		id, _ := res.LastInsertId()
-		s, _ := store.Get(r, "session")
-		s.Values["authenticated"] = true
-		s.Values["user_id"] = int(id)
-		s.Values["username"] = username
-		s.Values["role"] = "user"
-		s.Save(r, w)
+		log.Printf("✅ Создан пользователь: ID=%d, Username=%s", userID, username)
+
+		// Принудительно создаём новую сессию
+		session, _ := store.Get(r, "session")
+		session.Values["authenticated"] = true
+		session.Values["user_id"] = int(userID)
+		session.Values["username"] = username
+		session.Values["role"] = "user"
+		
+		// Сохраняем сессию ДО редиректа
+		err = session.Save(r, w)
+		if err != nil {
+			log.Printf("Ошибка сохранения сессии: %v", err)
+		}
+		
+		log.Printf("✅ Сессия сохранена для userID=%d", userID)
 
 		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 		return
