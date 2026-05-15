@@ -14,8 +14,8 @@ import (
 	"sync"
 	"time"
 
-	_ "github.com/lib/pq" // PostgreSQL драйвер (вместо mysql)
 	"github.com/gorilla/sessions"
+	_ "github.com/lib/pq"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -67,6 +67,15 @@ var (
 )
 
 func init() {
+	// Настройки сессии для продакшена
+	store.Options = &sessions.Options{
+		Path:     "/",
+		MaxAge:   86400 * 7, // 7 дней
+		HttpOnly: true,
+		Secure:   false, // для HTTP на Render; если будет HTTPS, нужно сменить на true
+		SameSite: http.SameSiteLaxMode,
+	}
+
 	// Значения по умолчанию для локальной разработки
 	if dbHost == "" {
 		dbHost = "localhost"
